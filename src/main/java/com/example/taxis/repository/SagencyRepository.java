@@ -1,0 +1,13 @@
+package com.example.taxis.repository;
+
+import com.example.taxis.entity.SagencyVehicle;
+import com.example.taxis.entity.WhiteListVehicle;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface SagencyRepository extends JpaRepository<SagencyVehicle, Integer> {
+    SagencyVehicle findByVehicleIdAndGovNumberAndRegActive (Integer id, String govNumber, Integer regActive);
+}
