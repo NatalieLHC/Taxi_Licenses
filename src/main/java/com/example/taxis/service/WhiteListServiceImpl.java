@@ -16,7 +16,7 @@ import java.time.Year;
 import java.util.List;
 
 @Service
-public class WhiteListServiceImpl implements WhiteListService{
+public class WhiteListServiceImpl implements WhiteListService {
 
     private final SagencyRepository sagencyRepository;
     private final WhiteListRepository whiteListRepository;
@@ -43,12 +43,10 @@ public class WhiteListServiceImpl implements WhiteListService{
         if (currentAge - carAge > 10) {
             throw new BadRequestException("400 - vehicle license parameters don't match");
         }
-            WhiteListVehicle whiteListVehicle = new WhiteListVehicle(sagencyVehicle);
+        WhiteListVehicle whiteListVehicle = new WhiteListVehicle(sagencyVehicle);
 
-            return whiteListVehicle;
-        }
-
-
+        return whiteListVehicle;
+    }
 
     @Override
     public WhiteListVehicle addToWhiteList(SearchParams searchParams) {
@@ -56,14 +54,20 @@ public class WhiteListServiceImpl implements WhiteListService{
         int vehicleId = whiteListVehicle.getVehicleId();
         String vehicleTaxiOwner = "ლიცენზირებული ტაქსები";
 
-        if (whiteListRepository.existsWhiteListVehicleByVehicleIdAndTaxiOwnerBodyNot(vehicleId, vehicleTaxiOwner) ){
+        if (whiteListRepository.existsWhiteListVehicleByVehicleIdAndTaxiOwnerBody(vehicleId, whiteListVehicle.getTaxiOwnerBody())) {
             throw new AlreadyExistsException("Vehicle already exists in the list");
         }
+
+        if (whiteListRepository.existsWhiteListVehicleByVehicleIdAndTaxiOwnerBodyNot(vehicleId, vehicleTaxiOwner)) {
+            throw new AlreadyExistsException("Vehicle already exists in the list with different status");
+        }
+
         return whiteListRepository.save(whiteListVehicle);
     }
 
     @Override
-    public WhiteListVehicle deleteFromWhiteList(WhiteListVehicle whiteListVehicle) {
+    public WhiteListVehicle deleteFromWhiteList(int vehicleId, String govNumber) {
+        SagencyVehicle sagencyVehicle = sagencyRepository.findByVehicleIdAndGovNumber(v)
         return null;
     }
 
@@ -72,8 +76,4 @@ public class WhiteListServiceImpl implements WhiteListService{
         return null;
     }
 
-//    @Override
-//    public List<WhiteListVehicle> getWhiteListVehicles() {
-//        return null;
-//    }
 }

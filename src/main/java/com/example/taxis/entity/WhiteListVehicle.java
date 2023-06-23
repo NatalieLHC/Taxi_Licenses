@@ -28,7 +28,6 @@ public class WhiteListVehicle {
         this.ownerPersonalNo = sagencyVehicle.getPersonalNo();
         this.ownerFirstName = sagencyVehicle.getFirstName();
         this.ownerLastName = sagencyVehicle.getLastName();
-        this.active = sagencyVehicle.getRegActive();
         this.vehicleAge = sagencyVehicle.getVehicleAge();
         this.color = sagencyVehicle.getColor();
         this.fineArticle = 125-0-2;
@@ -68,12 +67,13 @@ public class WhiteListVehicle {
     private String initiator;
     @Column(name = "reg_time" )
     private LocalDateTime regDate;
-    @Column(name = "reg_active" )
-    private Integer active;
+    @Column(name = "active" )
+    private boolean active;
 
     @PrePersist
     public void prePersist(){
         regDate = LocalDateTime.now();
+        active = true;
 
     }
 }

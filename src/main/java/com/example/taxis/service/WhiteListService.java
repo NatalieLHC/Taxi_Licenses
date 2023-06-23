@@ -14,7 +14,7 @@ public interface WhiteListService {
 
     WhiteListVehicle addToWhiteList (SearchParams searchParams);
 
-    WhiteListVehicle deleteFromWhiteList(WhiteListVehicle whiteListVehicle);
+    WhiteListVehicle deleteFromWhiteList(int vehicleId, String govNumber);
 
     List<WhiteListVehicle> getWhiteListVehicles();
 }

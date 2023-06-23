@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WhiteListRepository extends JpaRepository<WhiteListVehicle, Integer> {
     boolean existsWhiteListVehicleByVehicleIdAndTaxiOwnerBodyNot(int vehicleId, String taxiOwnerBody);
+    boolean existsWhiteListVehicleByVehicleIdAndTaxiOwnerBody(int vehicleId, String taxiOwnerBody);
 
 
 }

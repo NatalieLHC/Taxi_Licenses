@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface SagencyRepository extends JpaRepository<SagencyVehicle, Integer> {
     SagencyVehicle findByVehicleIdAndGovNumberAndRegActive (Integer id, String govNumber, Integer regActive);
+    SagencyVehicle findByVehicleIdAndGovNumber (Integer id, String govNumber);
 }
