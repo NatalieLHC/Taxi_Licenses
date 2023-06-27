@@ -2,6 +2,7 @@ package com.example.taxis.controller;
 
 import com.example.taxis.entity.SearchParams;
 import com.example.taxis.entity.WhiteListVehicle;
+import com.example.taxis.repository.WhiteListRepository;
 import com.example.taxis.service.WhiteListService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class WhiteListController {
 
     private final WhiteListService whiteListService;
+    private final WhiteListRepository whiteListRepository;
 
-    public WhiteListController(WhiteListService whiteListService) {
+    public WhiteListController(WhiteListService whiteListService,
+                               WhiteListRepository whiteListRepository) {
         this.whiteListService = whiteListService;
+        this.whiteListRepository = whiteListRepository;
     }
 
     @PostMapping("/addtowhitelist")
@@ -22,5 +26,11 @@ public class WhiteListController {
       whiteListService.addToWhiteList(searchParams);
       var location = UriComponentsBuilder.fromPath("/whitelist/" + searchParams.getVehicleId()).build().toUri();
       return ResponseEntity.created(location).body(searchParams);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<SearchParams> deleteFromWhiteList (@RequestBody SearchParams searchParams){
+        whiteListService.deleteFromWhiteList(searchParams);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -65,15 +65,35 @@ public class WhiteListServiceImpl implements WhiteListService {
         return whiteListRepository.save(whiteListVehicle);
     }
 
-    @Override
-    public WhiteListVehicle deleteFromWhiteList(int vehicleId, String govNumber) {
-        SagencyVehicle sagencyVehicle = sagencyRepository.findByVehicleIdAndGovNumber(v)
-        return null;
-    }
+//    public boolean searchMatchInBothLists(SearchParams searchParams){
+//        SagencyVehicle sagencyVehicle = sagencyRepository.findByVehicleIdAndGovNumber(searchParams.getVehicleId(), searchParams.getGovNumber());
+//        WhiteListVehicle whiteListVehicle = whiteListRepository.findByVehicleIdAndGovNumber(searchParams.getVehicleId(), searchParams.getGovNumber());
+//        if (sagencyVehicle.getVehicleId().equals(whiteListVehicle.getVehicleId()) && sagencyVehicle.getGovNumber().equals(whiteListVehicle.getGovNumber())) {
+//            return
+//        }
+//
+//
+//    }
 
     @Override
-    public List<WhiteListVehicle> getWhiteListVehicles() {
+    public void deleteFromWhiteList(SearchParams searchParams) {
+        SagencyVehicle sagencyVehicle = sagencyRepository.findByVehicleIdAndGovNumber(searchParams.getVehicleId(), searchParams.getGovNumber());
+
+        WhiteListVehicle whiteListVehicle = whiteListRepository.findByVehicleIdAndGovNumber(searchParams.getVehicleId(), searchParams.getGovNumber());
+        if (sagencyVehicle.getVehicleId().equals(whiteListVehicle.getVehicleId()) && sagencyVehicle.getGovNumber().equals(whiteListVehicle.getGovNumber())) {
+            whiteListVehicle.setActive(false);
+            whiteListRepository.save(whiteListVehicle);
+
+        }
+      }
+
+    @Override
+    public WhiteListVehicle getWhiteLiatVehicle(SearchParams searchParams) {
+
+        SagencyVehicle sagencyVehicle = sagencyRepository.findByVehicleIdAndGovNumber(searchParams.getVehicleId(), searchParams.getGovNumber());
+
+        WhiteListVehicle whiteListVehicle = whiteListRepository.findByVehicleIdAndGovNumber(searchParams.getVehicleId(), searchParams.getGovNumber());
         return null;
     }
-
 }
+
