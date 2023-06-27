@@ -10,6 +10,7 @@ import com.example.taxis.repository.WhiteListRepository;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
 
@@ -24,6 +25,10 @@ public class WhiteListServiceImpl implements WhiteListService {
         this.sagencyRepository = sagencyRepository;
         this.whiteListRepository = whiteListRepository;
         this.logRepository = logRepository;
+    }
+
+    public int getLogCountForDay(LocalDate date) {
+        return logRepository.getLogCountForDay(date);
     }
 
 
@@ -53,6 +58,11 @@ public class WhiteListServiceImpl implements WhiteListService {
         WhiteListVehicle whiteListVehicle = searchAndConvertVehicle(searchParams.getVehicleId(), searchParams.getGovNumber());
         int vehicleId = whiteListVehicle.getVehicleId();
         String vehicleTaxiOwner = "ლიცენზირებული ტაქსები";
+        LocalDate currentDate = LocalDate.now();
+        int requestCount = getLogCountForDay(currentDate);
+        if (requestCount>3){
+            throw new BadRequestException("Add request limit exceeded");
+        }
 
         if (whiteListRepository.existsWhiteListVehicleByVehicleIdAndTaxiOwnerBody(vehicleId, whiteListVehicle.getTaxiOwnerBody())) {
             throw new AlreadyExistsException("Vehicle already exists in the list");
@@ -72,6 +82,11 @@ public class WhiteListServiceImpl implements WhiteListService {
 
     @Override
     public void deleteFromWhiteList(SearchParams searchParams) {
+        LocalDate currentDate = LocalDate.now();
+        int requestCount = getLogCountForDay(currentDate);
+        if (requestCount>3){
+            throw new BadRequestException("Add request limit exceeded");
+        }
         SagencyVehicle sagencyVehicle = sagencyRepository.findByVehicleIdAndGovNumber(searchParams.getVehicleId(), searchParams.getGovNumber());
 
         WhiteListVehicle whiteListVehicle = whiteListRepository.findByVehicleIdAndGovNumber(searchParams.getVehicleId(), searchParams.getGovNumber());
@@ -85,6 +100,7 @@ public class WhiteListServiceImpl implements WhiteListService {
             whiteListRepository.save(whiteListVehicle);
 
         }
+        throw new BadRequestException("bad request");
     }
 
     @Override
