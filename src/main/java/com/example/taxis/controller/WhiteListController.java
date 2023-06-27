@@ -1,6 +1,7 @@
 package com.example.taxis.controller;
 
 import com.example.taxis.entity.SearchParams;
+import com.example.taxis.entity.TaxiResponse;
 import com.example.taxis.entity.WhiteListVehicle;
 import com.example.taxis.repository.WhiteListRepository;
 import com.example.taxis.service.WhiteListService;
@@ -19,6 +20,11 @@ public class WhiteListController {
                                WhiteListRepository whiteListRepository) {
         this.whiteListService = whiteListService;
         this.whiteListRepository = whiteListRepository;
+    }
+    @GetMapping("/gettaxi")
+    public TaxiResponse getTaxi(@RequestBody SearchParams searchParams){
+        var taxiResponse = whiteListService.getWhiteListVehicle(searchParams);
+        return taxiResponse;
     }
 
     @PostMapping("/addtowhitelist")

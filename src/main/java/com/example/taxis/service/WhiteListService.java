@@ -1,11 +1,10 @@
 package com.example.taxis.service;
 
-import com.example.taxis.entity.SagencyVehicle;
 import com.example.taxis.entity.SearchParams;
+
+import com.example.taxis.entity.TaxiResponse;
 import com.example.taxis.entity.WhiteListVehicle;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public interface WhiteListService {
@@ -16,5 +15,5 @@ public interface WhiteListService {
 
     void deleteFromWhiteList(SearchParams searchParams);
 
-    WhiteListVehicle getWhiteLiatVehicle(SearchParams searchParams);
+    TaxiResponse getWhiteListVehicle(SearchParams searchParams);
 }

@@ -2,6 +2,7 @@ package com.example.taxis.service;
 
 import com.example.taxis.entity.SagencyVehicle;
 import com.example.taxis.entity.SearchParams;
+import com.example.taxis.entity.TaxiResponse;
 import com.example.taxis.entity.WhiteListVehicle;
 import com.example.taxis.exceptions.AlreadyExistsException;
 import com.example.taxis.exceptions.BadRequestException;
@@ -65,15 +66,7 @@ public class WhiteListServiceImpl implements WhiteListService {
         return whiteListRepository.save(whiteListVehicle);
     }
 
-//    public boolean searchMatchInBothLists(SearchParams searchParams){
-//        SagencyVehicle sagencyVehicle = sagencyRepository.findByVehicleIdAndGovNumber(searchParams.getVehicleId(), searchParams.getGovNumber());
-//        WhiteListVehicle whiteListVehicle = whiteListRepository.findByVehicleIdAndGovNumber(searchParams.getVehicleId(), searchParams.getGovNumber());
-//        if (sagencyVehicle.getVehicleId().equals(whiteListVehicle.getVehicleId()) && sagencyVehicle.getGovNumber().equals(whiteListVehicle.getGovNumber())) {
-//            return
-//        }
-//
-//
-//    }
+
 
     @Override
     public void deleteFromWhiteList(SearchParams searchParams) {
@@ -88,12 +81,18 @@ public class WhiteListServiceImpl implements WhiteListService {
       }
 
     @Override
-    public WhiteListVehicle getWhiteLiatVehicle(SearchParams searchParams) {
+    public TaxiResponse getWhiteListVehicle(SearchParams searchParams) {
 
         SagencyVehicle sagencyVehicle = sagencyRepository.findByVehicleIdAndGovNumber(searchParams.getVehicleId(), searchParams.getGovNumber());
 
         WhiteListVehicle whiteListVehicle = whiteListRepository.findByVehicleIdAndGovNumber(searchParams.getVehicleId(), searchParams.getGovNumber());
-        return null;
+        if ((sagencyVehicle.getVehicleId().equals(whiteListVehicle.getVehicleId()) && sagencyVehicle.getGovNumber().equals(whiteListVehicle.getGovNumber()))) {
+            TaxiResponse taxiResponse = new TaxiResponse(whiteListVehicle);
+            return taxiResponse;
+        }
+        throw new NotFoundException("Vehicle not found in exceptions list");
+
     }
-}
+    }
+
 
